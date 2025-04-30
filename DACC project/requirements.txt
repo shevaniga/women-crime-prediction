@@ -5,3 +5,5 @@ scikit-learn==1.4.2
 plotly==5.21.0
 MarkupSafe==2.1.5
 gunicorn
+seaborn
+matplotlib
