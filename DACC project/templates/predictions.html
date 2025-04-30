@@ -1,0 +1,109 @@
+<!-- templates/predictions.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Predictions Ready</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0a192f 0%, #172a45 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            border-radius: 1.5rem;
+            padding: 3rem;
+            box-shadow: 0 8px 32px 0 rgba(100, 255, 218, 0.2);
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+        h1 {
+            font-size: 3.75rem;
+            font-weight: 800;
+            color: #64ffda;
+            margin-bottom: 2rem;
+            animation: bounceIn 1s;
+        }
+        a.download-btn {
+            background: rgba(100, 255, 218, 0.1);
+            border: 1px solid #64ffda;
+            color: #64ffda;
+            padding: 1rem 2rem;
+            border-radius: 9999px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin-top: 1rem;
+            box-shadow: 0 0 20px rgba(100, 255, 218, 0.4);
+        }
+        a.download-btn:hover {
+            background: rgba(100, 255, 218, 0.2);
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(100, 255, 218, 0.6);
+        }
+        a.back-link {
+            margin-top: 2rem;
+            color: #89c2d9;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        a.back-link:hover {
+            text-decoration: underline;
+            color: #64ffda;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0.9); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="glass">
+        <h1>Predictions Ready!</h1>
+        <a href="{{ url_for('static', filename='predictions.csv') }}" download class="download-btn">
+            Download CSV
+        </a>
+        <br>
+        <a href="{{ url_for('index') }}" class="back-link">
+            ← Back to Home
+        </a>
+    </div>
+
+    <!-- SweetAlert on page load -->
+    <script>
+      Swal.fire({
+          title: 'Success!',
+          text: 'Your predictions file is ready to download',
+          icon: 'success',
+          background: '#0a192f',
+          color: '#ffffff',
+          iconColor: '#64ffda',
+          confirmButtonColor: '#64ffda',
+          timer: 2500,
+          timerProgressBar: true,
+          showConfirmButton: false,
+          toast: true,
+          position: 'top-end'
+      });
+    </script>
+
+</body>
+</html>

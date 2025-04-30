@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Women Crimes Prediction Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    body {
+      background-color: #0a192f;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: start;
+      padding: 3rem;
+      font-family: 'Poppins', sans-serif;
+      color: #ffffff;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(100, 255, 218, 0.2);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      box-shadow: 0 8px 32px 0 rgba(100, 255, 218, 0.1);
+    }
+
+    h1, h2, p, label {
+      color: #ffffff;
+    }
+
+    .glow-btn {
+      background: rgba(100, 255, 218, 0.1);
+      border: 1px solid #64ffda;
+      color: #64ffda;
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      transition: all 0.3s ease-in-out;
+      box-shadow: 0 0 15px rgba(100, 255, 218, 0.8);
+    }
+
+    .glow-btn:hover {
+      background: rgba(100, 255, 218, 0.2);
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(100, 255, 218, 0.5);
+    }
+
+
+    table {
+      background: rgba(255, 255, 255, 0.05);
+      border-collapse: collapse;
+      border-radius: 1rem;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      color: #ffffff;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(100, 255, 218, 0.1);
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    input[type="text"], input[type="file"] {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(100, 255, 218, 0.2);
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      color: #ffffff;
+    }
+
+    input[type="text"]:focus, input[type="file"]:focus {
+      outline: none;
+      border-color: #64ffda;
+      box-shadow: 0 0 10px rgba(100, 255, 218, 0.4);
+    }
+  </style>
+</head>
+
+<body>
+    <body>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <script>
+              {% for category, message in messages %}
+              Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: '{{ "success" if category == "success" else "error" }}',
+                title: '{{ message }}',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                background: '#0a192f',
+                color: '#ffffff',
+                iconColor: '#64ffda'
+              });
+              {% endfor %}
+            </script>
+          {% endif %}
+        {% endwith %}
+        
+        
+
+  <div class="glass max-w-8xl w-full space-y-12">
+
+    <!-- Title -->
+    <h1 class="text-5xl font-extrabold text-center animate-pulse">Women Crimes Prediction Dashboard</h1>
+
+    <!-- Dataset Overview -->
+    <section>
+      <h2 class="text-2xl font-bold mb-6">Dataset Sample</h2>
+      <div class="overflow-x-auto">
+        {{ df_head|safe }}
+      </div>
+    </section>
+
+    <!-- Data Visualizations -->
+    <section>
+      <h2 class="text-2xl font-bold mb-6">Data Visualizations</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="glass p-4">
+          {{ heatmap_html|safe }}
+        </div>
+        <div class="glass p-4">
+          {{ bar_html|safe }}
+        </div>
+      </div>
+    </section>
+
+    <!-- Model Performance -->
+    <section>
+      <h2 class="text-2xl font-bold mb-6">Model Performance</h2>
+      <p class="text-lg">Model Accuracy: <span class="text-[#64ffda] font-bold">{{ accuracy }}%</span></p>
+      <div class="mt-6">
+        {{ cm_html|safe }}
+      </div>
+    </section>
+
+    <!-- Make Predictions -->
+    <section>
+      <h2 class="text-2xl font-bold mb-6">Make Predictions</h2>
+
+      <div class="glass p-6 space-y-8">
+        <!-- Upload CSV -->
+        <form action="/" method="POST" enctype="multipart/form-data" class="space-y-4">
+          <div>
+            <label class="block mb-2">Upload CSV File:</label>
+            <input type="file" name="file" class="block w-full">
+          </div>
+          <button type="submit" class="glow-btn w-full">Predict CSV</button>
+        </form>
+
+        <div class="text-center font-bold">OR</div>
+
+        <!-- Manual Input Form -->
+        <form action="/" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {% for col in numerical + categorical %}
+          <div>
+            <label class="block mb-2">{{ col.replace('_', ' ').title() }}</label>
+            <input type="text" name="{{ col }}" class="block w-full">
+          </div>
+          {% endfor %}
+          <div class="col-span-1 md:col-span-2">
+            <button type="submit" class="glow-btn w-full mt-4">Predict</button>
+          </div>
+        </form>
+      </div>
+
+      {% if prediction is not none %}
+      <script>
+        Swal.fire({
+          title: 'Prediction Result',
+          text: 'Prediction: {{ prediction }}',
+          icon: 'info',
+          confirmButtonColor: '#64ffda',
+          background: '#0a192f',
+          color: '#ffffff'
+        });
+      </script>
+      {% endif %}
+
+    </section>
+
+    <!-- Insights -->
+    <section>
+      <h2 class="text-2xl font-bold mb-6">Insights</h2>
+      <ul class="list-disc ml-6 space-y-3">
+        <li>Highly correlated features have stronger impact on predictions.</li>
+        <li>Model shows <b>{{ accuracy }}%</b> accuracy (based on training data).</li>
+        <li>Feature importances help optimize future data collection.</li>
+      </ul>
+    </section>
+
+  </div>
+
+</body>
+</html>

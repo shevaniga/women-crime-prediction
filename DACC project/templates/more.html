@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>More Visualizations</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #0a192f;
+      font-family: 'Poppins', sans-serif;
+      color: white;
+      padding: 3rem;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(100, 255, 218, 0.2);
+      border-radius: 1rem;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 0 30px rgba(100, 255, 218, 0.05);
+    }
+
+    .glow-btn {
+      background: rgba(100, 255, 218, 0.1);
+      border: 1px solid #64ffda;
+      color: #64ffda;
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      transition: all 0.3s ease-in-out;
+      box-shadow: 0 0 15px rgba(100, 255, 218, 0.8);
+    }
+
+    .glow-btn:hover {
+      background: rgba(100, 255, 218, 0.2);
+      transform: scale(1.05);
+    }
+
+    h2 {
+      color: #64ffda;
+      font-size: 1.75rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      margin-bottom: 1rem;
+      color: #cbd5e1;
+    }
+  </style>
+</head>
+<body>
+  <h1 class="text-4xl font-extrabold text-center mb-12">Deeper Visual Insights</h1>
+
+  <div class="glass">
+    <h2>1. Distribution of Persons Convicted</h2>
+    <p>This histogram shows how convictions are distributed across all entries, helping us detect skewness or anomalies.</p>
+    {{ hist_html|safe }}
+  </div>
+
+  <div class="glass">
+    <h2>2. Convictions by Crime Group</h2>
+    <p>The box plot visualizes how conviction numbers vary across different group names and highlights outliers.</p>
+    {{ box_html|safe }}
+  </div>
+
+  <div class="glass">
+    <h2>3. Violin Plot by Sub Group</h2>
+    <p>Combines box plot and density to show spread of convictions across subgroups for better distribution insights.</p>
+    {{ violin_html|safe }}
+  </div>
+
+  <div class="glass">
+    <h2>4. Convictions vs Chargesheeted</h2>
+    <p>A scatter plot to observe potential correlation between persons chargesheeted and convicted, grouped by category.</p>
+    {{ scatter_html|safe }}
+  </div>
+
+  <div class="glass">
+    <h2>5. Average Convictions per Area</h2>
+    <p>Bar plot showing average convictions across different areas to identify regional trends.</p>
+    {{ bar_avg_html|safe }}
+  </div>
+
+  <div class="glass">
+    <h2>6. KDE Plot of Conviction Density</h2>
+    <p>A smooth kernel density plot that helps understand where conviction counts are most concentrated.</p>
+    {{ kde_html|safe }}
+  </div>
+
+  <div class="glass">
+    <h2>7. 3D Plot: Arrested vs Chargesheeted vs Convicted</h2>
+    <p>This 3D scatter plot provides a dimensional understanding of how arrests and charges relate to convictions.</p>
+    {{ scatter3d_html|safe }}
+  </div>
+  
+  <div class="glass">
+    <h2>8. Pairplot: Relationship Overview</h2>
+    <p>The pairplot shows pairwise relationships between arrest, chargesheeting, and convictions — useful to check linearity and clustering.</p>
+    {{ pairplot_html|safe }}
+  </div>
+    
+
+  <div class="text-center mt-8">
+    <a href="{{ url_for('index') }}" class="glow-btn">← Back to Dashboard</a>
+  </div>
+</body>
+</html>
